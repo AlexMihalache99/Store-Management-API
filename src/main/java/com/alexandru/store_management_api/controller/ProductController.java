@@ -1,10 +1,11 @@
 package com.alexandru.store_management_api.controller;
 
-import com.alexandru.store_management_api.entity.Product;
+import com.alexandru.store_management_api.dto.CreateProductRequest;
+import com.alexandru.store_management_api.dto.ProductResponse;
+import com.alexandru.store_management_api.dto.UpdateProductRequest;
 import com.alexandru.store_management_api.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -18,23 +19,26 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
-    }
-
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ProductResponse create(@RequestBody CreateProductRequest request) {
+        return productService.createProduct(request);
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public ProductResponse getById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
+    @GetMapping
+    public List<ProductResponse> getAll() {
+        return productService.getAllProducts();
+    }
+
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestParam(required = false) BigDecimal price, @RequestParam(required = false) Integer stockQuantity) {
-        return productService.updateProduct(id, price, stockQuantity);
+    public ProductResponse update(
+            @PathVariable Long id,
+            @RequestBody UpdateProductRequest request) {
+
+        return productService.updateProduct(id, request);
     }
 
     @DeleteMapping("/{id}")

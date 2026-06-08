@@ -1,11 +1,14 @@
 package com.alexandru.store_management_api.service;
 
 
+import com.alexandru.store_management_api.dto.CreateProductRequest;
+import com.alexandru.store_management_api.dto.ProductResponse;
+import com.alexandru.store_management_api.dto.UpdateProductRequest;
 import com.alexandru.store_management_api.entity.Product;
 import com.alexandru.store_management_api.repository.ProductRepository;
+
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -18,34 +21,59 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public ProductResponse createProduct(CreateProductRequest request) {
+        Product product = new Product();
+        product.setName(request.name());
+        product.setDescription(request.description());
+        product.setPrice(request.price());
+        product.setStockQuantity(request.stockQuantity());
+
+        Product savedProduct = productRepository.save(product);
+        return toResponse(savedProduct);
+    }
+    
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll()
+            .stream()
+            .map(this::toResponse)
+            .toList();
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        return toResponse(product);
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-    }
-
-    public Product updateProduct(Long id, BigDecimal price, Integer stockQuantity) {
-        Product existingProduct = getProductById(id);
-        if (existingProduct != null) {
-
-            if(price != null) {
-                existingProduct.setPrice(price);
-            }
-            if(stockQuantity != null) {
-                existingProduct.setStockQuantity(stockQuantity);
-            }
-            return productRepository.save(existingProduct);
+    public ProductResponse updateProduct(Long id, UpdateProductRequest request) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+        
+        if(request.price() != null) {
+            product.setPrice(request.price());
         }
-        return null;
+        if(request.stockQuantity() != null) {
+            product.setStockQuantity(request.stockQuantity());
+        }
+
+        Product updatedProduct = productRepository.save(product);
+
+        return toResponse(updatedProduct);
     }
 
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        productRepository.delete(product);
     }
+
+    private ProductResponse toResponse(Product product) {
+    return new ProductResponse(
+            product.getId(),
+            product.getName(),
+            product.getDescription(),
+            product.getPrice(),
+            product.getStockQuantity()
+    );
+}
 }
