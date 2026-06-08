@@ -25,7 +25,13 @@ GET http://localhost:8080/products
 GET http://localhost:8080/products/1
 
 ### Change Price
-PATCH http://localhost:8080/products/1?price=1099.99
+PATCH http://localhost:8080/products/1
+Content-Type: application/json
+
+{
+  "price": 1099.99,
+  "stockQuantity": 15
+}
 
 ### Delete Product
 DELETE http://localhost:8080/products/1
