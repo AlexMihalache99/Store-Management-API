@@ -22,10 +22,12 @@ A simple backend API for managing products and users in a store system. Built wi
 src/main/java/com/alexandru/store_management_api
 
 ├── controller
-├── service
-├── repository
+├── dto
 ├── entity
+├── http
+├── repository
 ├── security
+├── service
 └── StoreManagementApiApplication.java
 ```
 
@@ -77,9 +79,11 @@ OK
 ### Users
 
 ```
-POST   /users        Create user
-GET    /users        Get all users
-GET    /users/{id}   Get user by ID
+POST      /users        Create user
+GET       /users        Get all users
+GET       /users/{id}   Get user by ID
+PUT       /users/{id}   Update user
+DELETE    /users/{id}   Delete user by ID
 ```
 
 Example request:
@@ -92,6 +96,27 @@ Example request:
 }
 ```
 
+### Products
+
+```
+POST   /products       Create products
+GET    /products       Get all products
+GET    /products/{id}  Get product by ID
+PATCH  /products/{id}  Update product
+
+```
+
+Example request:
+
+```json
+{
+  "name": "iPhone 17",
+  "description": "Apple smartphone",
+  "price": 999.99,
+  "stockQuantity": 10
+}
+
+```
 ---
 
 ## 🧪 Testing API
@@ -114,17 +139,29 @@ Content-Type: application/json
 }
 ```
 
+```http
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 17",
+  "description": "Apple smartphone",
+  "price": 999.99,
+  "stockQuantity": 10
+}
+```
+
 ---
 
 ## 📈 Future Improvements
 
-* Add Product management module (CRUD)
-* Add JWT authentication
-* Add role-based authorization
-* Add DTO layer for all responses
 * Add global exception handling
-* Add unit and integration tests
+* Add custom exceptions
+* Validations
+* Add role-based authorization
+* Add JWT authentication
 * Add logging and request tracing
+* Add unit and integration tests
 
 ---
 
