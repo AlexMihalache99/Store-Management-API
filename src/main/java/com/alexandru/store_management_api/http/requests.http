@@ -6,3 +6,26 @@ Content-Type: application/json
   "password": "admin123",
   "role": "ADMIN"
 }
+
+### Create Product
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 17",
+  "description": "Apple smartphone",
+  "price": 999.99,
+  "stockQuantity": 10
+}
+
+### Get All Products
+GET http://localhost:8080/products
+
+### Get Product By Id
+GET http://localhost:8080/products/1
+
+### Change Price
+PATCH http://localhost:8080/products/1?price=1099.99
+
+### Delete Product
+DELETE http://localhost:8080/products/1
