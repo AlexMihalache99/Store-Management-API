@@ -153,9 +153,6 @@ Content-Type: application/json
 
 ## 📈 Future Improvements
 
-* Add global exception handling
-* Add custom exceptions
-* Validations
 * Add role-based authorization
 * Add JWT authentication
 * Add logging and request tracing
