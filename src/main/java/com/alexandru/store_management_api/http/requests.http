@@ -35,3 +35,14 @@ Content-Type: application/json
 
 ### Delete Product
 DELETE http://localhost:8080/products/1
+
+### Testing Validation
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 17",
+  "description": "Apple smartphone",
+  "price": 0,
+  "stockQuantity": -1
+}

@@ -4,6 +4,9 @@ import com.alexandru.store_management_api.dto.CreateProductRequest;
 import com.alexandru.store_management_api.dto.ProductResponse;
 import com.alexandru.store_management_api.dto.UpdateProductRequest;
 import com.alexandru.store_management_api.service.ProductService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductResponse create(@RequestBody CreateProductRequest request) {
+    public ProductResponse create(@Valid @RequestBody CreateProductRequest request) {
         return productService.createProduct(request);
     }
 
@@ -36,7 +39,7 @@ public class ProductController {
     @PatchMapping("/{id}")
     public ProductResponse update(
             @PathVariable Long id,
-            @RequestBody UpdateProductRequest request) {
+            @Valid@RequestBody UpdateProductRequest request) {
 
         return productService.updateProduct(id, request);
     }
