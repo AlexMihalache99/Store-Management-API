@@ -103,7 +103,6 @@ POST   /products       Create products
 GET    /products       Get all products
 GET    /products/{id}  Get product by ID
 PATCH  /products/{id}  Update product
-
 ```
 
 Example request:
@@ -115,7 +114,6 @@ Example request:
   "price": 999.99,
   "stockQuantity": 10
 }
-
 ```
 ---
 

@@ -5,6 +5,7 @@ import com.alexandru.store_management_api.dto.CreateProductRequest;
 import com.alexandru.store_management_api.dto.ProductResponse;
 import com.alexandru.store_management_api.dto.UpdateProductRequest;
 import com.alexandru.store_management_api.entity.Product;
+import com.alexandru.store_management_api.exception.ProductNotFoundException;
 import com.alexandru.store_management_api.repository.ProductRepository;
 
 import org.springframework.stereotype.Service;
@@ -40,13 +41,13 @@ public class ProductService {
     }
 
     public ProductResponse getProductById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         return toResponse(product);
     }
 
     public ProductResponse updateProduct(Long id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Product not found"));
+            .orElseThrow(() -> new ProductNotFoundException(id));
         
         if(request.price() != null) {
             product.setPrice(request.price());
@@ -62,7 +63,7 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.delete(product);
     }
