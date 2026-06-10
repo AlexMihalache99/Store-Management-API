@@ -203,7 +203,7 @@ Unit tests were added for:
 - Provide Dockerfile and docker-compose for local development
 - Add OpenAPI/Swagger documentation and example clients
 - Add metrics, health checks and structured logging (Prometheus, Micrometer)
-- Implement rate limiting and basic audit logging
+- Implement rate limiting
 
 ---
 
