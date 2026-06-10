@@ -198,7 +198,6 @@ Unit tests were added for:
 - Use a database-backed user store (replace in-memory users)
 - Implement token revocation / refresh tokens
 - Add API pagination, sorting and filtering for list endpoints
-- Improve input validation and standardized error responses
 - Add CI/CD pipeline to run build, tests and coverage
 - Provide Dockerfile and docker-compose for local development
 - Add OpenAPI/Swagger documentation and example clients
