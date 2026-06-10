@@ -1,15 +1,47 @@
-POST http://localhost:8080/users
+```http
+# Manual test helper for Store Management API
+# 1) Set JWT secret (required before starting the app):
+#    macOS / Linux:
+#      export JWT_SECRET="a-strong-32+byte-secret"
+#    PowerShell:
+#      $env:JWT_SECRET = "a-strong-32+byte-secret"
+# 2) Start app:
+#      ./mvnw spring-boot:run
+# 3) Use either the curl examples below or run the REST requests in this file
+
+### Obtain JWT (login)
+POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
   "username": "admin",
-  "password": "admin123",
-  "role": "ADMIN"
+  "password": "adminpass"
 }
 
-### Create Product
+### Obtain JWT (login)
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "userpass"
+}
+
+### Create User (requires ADMIN)
+POST http://localhost:8080/users
+Content-Type: application/json
+Authorization: Bearer <PASTE_TOKEN_HERE>
+
+{
+  "username": "new_user",
+  "password": "newpass",
+  "role": "USER"
+}
+
+### Create Product (requires ADMIN)
 POST http://localhost:8080/products
 Content-Type: application/json
+Authorization: Bearer <PASTE_TOKEN_HERE>
 
 {
   "name": "iPhone 17",
@@ -18,27 +50,32 @@ Content-Type: application/json
   "stockQuantity": 10
 }
 
-### Get All Products
+### Get All Products (requires USER or ADMIN)
 GET http://localhost:8080/products
+Authorization: Bearer <PASTE_TOKEN_HERE>
 
-### Get Product By Id
+### Get Product By Id (requires USER or ADMIN)
 GET http://localhost:8080/products/1
+Authorization: Bearer <PASTE_TOKEN_HERE>
 
-### Change Price
+### Update Product (requires ADMIN)
 PATCH http://localhost:8080/products/1
 Content-Type: application/json
+Authorization: Bearer <PASTE_TOKEN_HERE>
 
 {
   "price": 1099.99,
   "stockQuantity": 15
 }
 
-### Delete Product
+### Delete Product (requires ADMIN)
 DELETE http://localhost:8080/products/1
+Authorization: Bearer <PASTE_TOKEN_HERE>
 
-### Testing Validation
+### Validation test (should return 4xx)
 POST http://localhost:8080/products
 Content-Type: application/json
+Authorization: Bearer <PASTE_TOKEN_HERE>
 
 {
   "name": "iPhone 17",
