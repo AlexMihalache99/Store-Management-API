@@ -7,7 +7,7 @@ A simple backend API for managing products and users. Built with Spring Boot, Sp
 ## Quick Links
 
 - Project: `store-management-api`
-- Source: this repository
+- Source: current repository
 - Tests: `./mvnw test`
 - Coverage report: `target/site/jacoco/index.html`
 
@@ -32,6 +32,7 @@ Prerequisites:
 Run the application locally:
 
 ```bash
+export JWT_SECRET="a-strong-32+byte-secret"  # required
 ./mvnw spring-boot:run
 ```
 
@@ -45,12 +46,49 @@ http://localhost:8080
 
 ## 🔐 Security
 
-Spring Security is enabled.
+Spring Security is enabled and the project uses JWT-based authentication for the demo.
 
-Later improvements will include:
+- **Users (in-memory demo):**
+  - `admin` / `adminpass` — roles: `ADMIN`, `USER`
+  - `user` / `userpass` — roles: `USER`
 
-* JWT authentication
-* Role-based access control (USER / ADMIN)
+- **JWT Auth flow:**
+  1. POST `/auth/login` with JSON `{ "username":"admin", "password":"adminpass" }` to receive a JWT token.
+  2. Send `Authorization: Bearer <token>` for protected endpoints.
+
+- **Role rules:**
+  - `GET /products` and `GET /users` — requires `USER` or `ADMIN`.
+  - `POST`, `PUT`, `PATCH`, `DELETE` for `/products` and `/users` — requires `ADMIN`.
+
+- **Important:** The application reads the JWT signing secret from the `JWT_SECRET` environment variable. You must set `JWT_SECRET` before starting the app;
+
+```bash
+export JWT_SECRET="a-strong-32+byte-secret"
+```
+
+- **Quick curl (get token):**
+
+```bash
+curl -X POST http://localhost:8080/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"adminpass"}'
+```
+
+- **Create product (ADMIN):**
+
+```bash
+TOKEN=$(curl -s -X POST http://localhost:8080/auth/login -H "Content-Type: application/json" -d '{"username":"admin","password":"adminpass"}' | jq -r .token)
+curl -X POST http://localhost:8080/products \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"name":"iPhone 17","description":"Apple smartphone","price":999.99,"stockQuantity":10}'
+```
+
+Later improvements considered:
+
+* Move secrets to a secret manager
+* Database-backed users
+* Token revocation / refresh tokens
 ---
 
 ## Build & Test
@@ -105,14 +143,6 @@ Notable files
 
 Base URL: `http://localhost:8080`
 
-Health
-
-```http
-GET /health
-Response: 200 OK
-Body: "OK"
-```
-
 Users
 
 ```
@@ -164,8 +194,16 @@ Unit tests were added for:
 
 ## 📈 Future Improvements
 
-* Add role-based authorization
-* Add JWT authentication
+- Move secrets to a secret manager (Vault, AWS Secrets Manager, etc.)
+- Use a database-backed user store (replace in-memory users)
+- Implement token revocation / refresh tokens
+- Add API pagination, sorting and filtering for list endpoints
+- Improve input validation and standardized error responses
+- Add CI/CD pipeline to run build, tests and coverage
+- Provide Dockerfile and docker-compose for local development
+- Add OpenAPI/Swagger documentation and example clients
+- Add metrics, health checks and structured logging (Prometheus, Micrometer)
+- Implement rate limiting and basic audit logging
 
 ---
 
